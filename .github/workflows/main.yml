@@ -13,9 +13,9 @@ jobs:
         strategy:
             matrix:
                 include:
-                    - cible: 'frontend toto'
+                    - cible: 'frontend-toto'
                       full_image_name: ghcr.io/${{ github.repository }}/frontend
-                    - cible: 'node-api tata'
+                    - cible: 'node-api-tata'
                       full_image_name: ghcr.io/${{ github.repository }}/node-api
         steps:
             # CHECKOUT - https://github.com/actions/checkout
