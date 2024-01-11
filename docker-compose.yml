@@ -4,13 +4,13 @@ version: '3.9'
 services:
     # Service n° 1 - API Backend
     node-api:
-        image: ghcr.io/zyrass/cicd-projet-docker-v2/node-api:latest
+        image: ghcr.io/zyrass/cicd-projet-docker-v2/node-api
         ports:
             - '3000:80' # lie le port 3000 sur votre machine hôte au port 80 du conteneur.
 
     # Service n° 2 - Frontend
     frontend:
-        image: ghcr.io/zyrass/cicd-projet-docker-v2/frontend:latest
+        image: ghcr.io/zyrass/cicd-projet-docker-v2/frontend
         ports:
             - '80:80' # lie le port 80 sur votre machine hôte au port 80 du conteneur.
 
