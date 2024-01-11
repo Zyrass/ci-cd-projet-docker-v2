@@ -16,9 +16,9 @@ jobs:
             matrix:
                 include:
                     - cible: 'frontend'
-                      full_image_name: ghcr.io/$GITHUB_REPOSITORY_TO_LOWERCASE/frontend
+                      full_image_name: ghcr.io/${{ env.GITHUB_REPOSITORY_TO_LOWERCASE }}/frontend
                     - cible: 'node-api'
-                      full_image_name: ghcr.io/$GITHUB_REPOSITORY_TO_LOWERCASE/node-api
+                      full_image_name: ghcr.io/${{ env.GITHUB_REPOSITORY_TO_LOWERCASE }}/node-api
         steps:
             # CHECKOUT - https://github.com/actions/checkout
             # ------------------------------------------------------------------------------------------------------
