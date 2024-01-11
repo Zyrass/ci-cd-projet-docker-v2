@@ -13,9 +13,9 @@ jobs:
         strategy:
             matrix:
                 include:
-                    - cible: 'frontend'
+                    - cible: 'frontend toto'
                       full_image_name: ghcr.io/${{ github.repository }}/frontend
-                    - cible: 'node-api'
+                    - cible: 'node-api tata'
                       full_image_name: ghcr.io/${{ github.repository }}/node-api
         steps:
             # CHECKOUT - https://github.com/actions/checkout
@@ -34,6 +34,7 @@ jobs:
             # ------------------------------------------------------------------------------------------------------
             # Met en place Docker Buildx pour améliorer les builds Docker avec des fonctionnalités avancées,
             # telles que la mise en cache.
+            # ATTENTION à bien avoir le nom du répertoire (reposiory) en minuscule !! c'est impératif
             - name: Mise en place de Docker Buildx
               uses: docker/setup-buildx-action@v3
 
