@@ -13,9 +13,9 @@ jobs:
         strategy:
             matrix:
                 include:
-                    - cible: 'frontend-toto'
+                    - cible: 'frontend'
                       full_image_name: ghcr.io/${{ github.repository }}/frontend
-                    - cible: 'node-api-toto'
+                    - cible: 'node-api'
                       full_image_name: ghcr.io/${{ github.repository }}/node-api
         steps:
             # CHECKOUT - https://github.com/actions/checkout
@@ -66,6 +66,6 @@ jobs:
               with:
                   push: true
                   tags: ${{ matrix.full_image_name }}:latest
-                  context: ./${{ matrix.cible }}-toto
+                  context: ./${{ matrix.cible }}
                   cache-from: type=gha # gha = Permet de spécifier où sont stockés les images. (Ici dans github Actions "gha")
                   cache-to: type=gha,mode=max # Force la mise à jour du cache qui permet d'avoir toujours un cache à jour
