@@ -15,7 +15,7 @@ jobs:
                 working-directory: ./frontend
         strategy:
             matrix:
-                node_version: [18, 20, 21]
+                node_version: [18, 20]
         steps:
             # CHECKOUT - https://github.com/actions/checkout
             # ------------------------------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ jobs:
                 working-directory: ./node-api
         strategy:
             matrix:
-                node_version: [18, 20, 21]
+                node_version: [18, 20]
         steps:
             # CHECKOUT - https://github.com/actions/checkout
             # ------------------------------------------------------------------------------------------------------
