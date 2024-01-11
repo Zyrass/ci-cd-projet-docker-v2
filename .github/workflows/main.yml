@@ -10,13 +10,15 @@ jobs:
         runs-on: ubuntu-latest
         permissions:
             packages: write
+        env:
+            GITHUB_REPOSITORY_TO_LOWERCASE: echo "GITHUB_REPOSITORY_TO_LOWERCASE=$(echo '{{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
         strategy:
             matrix:
                 include:
                     - cible: 'frontend'
-                      full_image_name: ghcr.io/${{ github.repository }}/frontend
+                      full_image_name: ghcr.io/$GITHUB_REPOSITORY_TO_LOWERCASE/frontend
                     - cible: 'node-api'
-                      full_image_name: ghcr.io/${{ github.repository }}/node-api
+                      full_image_name: ghcr.io/$GITHUB_REPOSITORY_TO_LOWERCASE/node-api
         steps:
             # CHECKOUT - https://github.com/actions/checkout
             # ------------------------------------------------------------------------------------------------------
