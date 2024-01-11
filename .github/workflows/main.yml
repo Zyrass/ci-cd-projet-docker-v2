@@ -53,7 +53,7 @@ jobs:
         defaults:
             run:
                 shell: bash
-                working-directory: ./frontend
+                working-directory: ./node-api
         strategy:
             matrix:
                 node_version: [18, 20, 21]
