@@ -6,7 +6,95 @@ on:
             - main
 
 jobs:
-    build:
+    tests-frontend:
+        name: tests-frontend-node-${{ matrix.node_version }}
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                shell: bash
+                working-directory: ./frontend
+        strategy:
+            matrix:
+                node_version: [18, 20, 21]
+        steps:
+            # CHECKOUT - https://github.com/actions/checkout
+            # ------------------------------------------------------------------------------------------------------
+            # Utilise l'action GitHub 'checkout' pour cloner le code source du dépôt dans l'environnement de build.
+            - name: Clonage du code source avec l'action checkout
+              uses: actions/checkout@v4
+
+            # CHECKOUT - https://github.com/actions/setup-node
+            # ------------------------------------------------------------------------------------------------------
+            # Utilise l'action GitHub 'setup-node' pour installer NodeJS
+            - name: Installation de NodeJS avec l'action setup-node
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node_version }}
+                  cache: 'npm'
+                  cache-dependency-path: ./frontend/package-lock.json
+
+            - name: Vérification des dépendances
+              run: npm audit --audit-level=moderate
+              continue-on-error: true # Permet de continuer si celle-ci échoue
+
+            - name: Correction automatique des dépendances
+              if: ${{ failure() }}
+              run: npm audit fix
+
+            - name: Installation des dépedances
+              run: npm ci --prefer-offline
+
+            - name: run linter
+              run: npm run lint
+
+    tests-backend:
+        name: tests-backend-node-${{ matrix.node_version }}
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                shell: bash
+                working-directory: ./frontend
+        strategy:
+            matrix:
+                node_version: [18, 20, 21]
+        steps:
+            # CHECKOUT - https://github.com/actions/checkout
+            # ------------------------------------------------------------------------------------------------------
+            # Utilise l'action GitHub 'checkout' pour cloner le code source du dépôt dans l'environnement de build.
+            - name: Clonage du code source avec l'action checkout
+              uses: actions/checkout@v4
+
+            # CHECKOUT - https://github.com/actions/setup-node
+            # ------------------------------------------------------------------------------------------------------
+            # Utilise l'action GitHub 'setup-node' pour installer NodeJS
+            - name: Installation de NodeJS avec l'action setup-node
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node_version }}
+                  cache: 'npm'
+                  cache-dependency-path: ./node-api/package-lock.json
+
+            - name: Vérification des dépendances
+              run: npm audit --audit-level=moderate
+              continue-on-error: true # Permet de continuer si celle-ci échoue
+
+            - name: Correction automatique des dépendances
+              if: ${{ failure() }}
+              run: npm audit fix
+
+            - name: Installation des dépedances
+              run: npm ci --prefer-offline
+
+            - name: run linter
+              run: npm run lint
+
+            - name: Exécution des tests unitaires
+              run: npm run test:ci
+
+    build-image-docker:
+        needs:
+            - tests-frontend
+            - tests-backend
         runs-on: ubuntu-latest
         permissions:
             packages: write
