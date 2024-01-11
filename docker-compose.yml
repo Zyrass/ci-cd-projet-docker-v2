@@ -14,7 +14,7 @@ services:
         ports:
             - '80:80' # lie le port 80 sur votre machine hôte au port 80 du conteneur.
 
-    # Service n° 3 - Tests end-2-end
+    # Service n° 3 - Tests end-2-end (e2e)
     cypress:
         image: cypress/included
         working_dir: /e2e
