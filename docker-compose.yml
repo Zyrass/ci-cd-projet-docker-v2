@@ -1,0 +1,26 @@
+version: '3.9'
+
+# Liste tous les services (conteneurs) que l'application va utiliser
+services:
+    # Service n° 1 - API Backend
+    node-api:
+        image: ghcr.io/zyrass/cicd-projet-docker-v2/node-api:latest
+        ports:
+            - '3000:80' # lie le port 3000 sur votre machine hôte au port 80 du conteneur.
+
+    # Service n° 2 - Frontend
+    frontend:
+        image: ghcr.io/zyrass/cicd-projet-docker-v2/frontend:latest
+        ports:
+            - '80:80' # lie le port 80 sur votre machine hôte au port 80 du conteneur.
+
+    # Service n° 3 - Tests end-2-end
+    cypress:
+        image: cypress/included
+        working_dir: /e2e
+        volumes:
+            - ./frontend:/e2e
+        entrypoint: cypress run --config baseUrl=http://frontend --headless --browser chrome -C cypress.config.js
+        depends_on:
+            - frontend
+            - node-api

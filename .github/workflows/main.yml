@@ -162,3 +162,29 @@ jobs:
                   context: ./${{ matrix.cible }}
                   cache-from: type=gha # gha = Permet de spécifier où sont stockés les images. (Ici dans github Actions "gha")
                   cache-to: type=gha,mode=max # Force la mise à jour du cache qui permet d'avoir toujours un cache à jour
+
+    tests-end-2-end:
+        needs: build-image-docker
+        runs-on: ubuntu-latest
+        steps:
+            # CHECKOUT - https://github.com/actions/checkout
+            # ------------------------------------------------------------------------------------------------------
+            # Utilise l'action GitHub 'checkout' pour cloner le code source du dépôt dans l'environnement de build.
+            - name: Clonage du code source avec l'action checkout
+              uses: actions/checkout@v4
+
+            # LOGIN-ACTION - https://github.com/docker/login-action
+            # ------------------------------------------------------------------------------------------------------
+            # Authentification sécurisée au Github Container Registry pour permettre le push des images Docker.
+            - name: Authentification au Github Container Registry
+              uses: docker/login-action@v3
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor}}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Démarrage des tests end-2-end (e2e)
+              run: docker compose up --exit-code-from cypress --abort-on-container-exit
+
+            - name: Nettoyage
+              run: docker compose down -v --remove-orphans
