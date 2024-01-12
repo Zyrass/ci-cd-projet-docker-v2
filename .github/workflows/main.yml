@@ -5,6 +5,10 @@ on:
         branches:
             - main
 
+env:
+    SERVER_PRODUCTION_IP: '51.210.179.153'
+    SERVER_PRODUCTION_USER: 'root'
+
 jobs:
     tests-frontend:
         name: tests-frontend-node-${{ matrix.node_version }}
@@ -188,3 +192,27 @@ jobs:
 
             - name: Nettoyage
               run: docker compose down -v --remove-orphans
+
+    deploy-production:
+        needs: tests-end-2-end
+        runs-on: ubuntu-latest
+        if: github.ref == 'refs/heads/main'
+        environment:
+            name: production
+            url: http://$SERVER_PRODUCTION_IP
+        steps:
+            # CHECKOUT - https://github.com/actions/checkout
+            # ------------------------------------------------------------------------------------------------------
+            # Utilise l'action GitHub 'checkout' pour cloner le code source du dépôt dans l'environnement de build.
+            - name: Clonage du code source avec l'action checkout
+              uses: actions/checkout@v4
+
+            - name: Déploiement sur le serveur de production
+              run: |
+                  eval $(ssh-agent -s)
+                  ssh-add - <<< "${{ secrets.VPS_KEY }}"
+                  mkdir -p ~/.ssh
+                  ssh-keygen -H ${{ env.SERVER_PRODUCTION_IP }} >> ~/.ssh/known_hosts
+                  scp docker-compose.production.yml ${{ env.SERVER_PRODUCTION_USER }}@${{ env.SERVER_PRODUCTION_IP }}:/root/docker-compose.production.yml
+                  ssh ${{ env.SERVER_PRODUCTION_USER }}@${{ env.SERVER_PRODUCTION_IP }} "docker login ghcr.io -u ${{ github.actor }}" -p ${{ secrets.GITHUB_TOKEN }}
+                  ssh ${{ env.SERVER_PRODUCTION_USER }}@${{ env.SERVER_PRODUCTION_IP }} "docker compose -f /root/docker-compose.production.yml up -d --force-recreate"
