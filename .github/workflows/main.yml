@@ -5,6 +5,10 @@ on:
         branches:
             - main
 
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
 env:
     SERVER_PRODUCTION_IP: '51.210.179.153'
     SERVER_PRODUCTION_USER: 'root'
