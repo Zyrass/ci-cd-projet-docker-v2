@@ -3,18 +3,18 @@ services:
     node-api:
         image: ghcr.io/zyrass/ci-cd-projet-docker-v2/node-api:latest
         environment:
-            - NODE_ENV=production
+            - NODE_ENV=production # Permet de se connecter à la DB de production
         deploy:
-            replicas: 3
+            replicas: 3 # Création de 3 instances de ce service
             update_config:
-                parallelism: 1
-                delay: 10s
+                parallelism: 1 # Met à jour un conteneur à la fois
+                delay: 10s # attends 10 secondes entre les mises à jour
             restart_policy:
-                condition: on-failure
+                condition: on-failure # Redémarre le conteneur en cas d'échec
 
     frontend:
         image: ghcr.io/zyrass/ci-cd-projet-docker-v2/frontend:latest
         ports:
-            - target: 80
-              published: 80
-        restart: always
+            - target: 80 # Le port du conteneur sur lequel le service écoute
+              published: 80 # le port de l'hôte sur lequel les données seront disponibles
+        restart: always # le service sera toujours relancé
