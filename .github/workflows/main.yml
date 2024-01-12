@@ -49,10 +49,10 @@ jobs:
               if: ${{ failure() }}
               run: npm audit fix
 
-            - name: Installation des dépedances
+            - name: Installation des dépendances
               run: npm ci --prefer-offline
 
-            - name: run linter
+            - name: Utilisation d'un Linter
               run: npm run lint
 
     tests-backend:
