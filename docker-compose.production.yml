@@ -4,6 +4,7 @@ services:
         image: ghcr.io/zyrass/ci-cd-projet-docker-v2/node-api:latest
         environment:
             - NODE_ENV=production # Permet de se connecter à la DB de production
+        pull_policy: always # Télécharge constamment la dernière mise à jour
         deploy:
             replicas: 3 # Création de 3 instances de ce service
             update_config:
