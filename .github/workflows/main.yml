@@ -228,7 +228,9 @@ jobs:
               run: docker compose -f docker-compose.production.yml top
 
     deploy-production:
-        needs: tests-end-2-end
+        needs:
+            - tests-end-2-end
+            - deploy-staging
         runs-on: ubuntu-latest
         if: github.ref == 'refs/heads/main'
         environment:
